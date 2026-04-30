@@ -5,6 +5,7 @@ import paho.mqtt.client as mqtt
 
 
 class MqttClient:
+    # Wrapper tipis di atas paho-mqtt agar page/backend tidak perlu tahu detail client asli.
     def __init__(
         self,
         broker="10.33.11.148",
@@ -50,6 +51,7 @@ class MqttClient:
     def _run(self):
         try:
             self._log(f"[MQTT] Connecting to {self.broker}:{self.port}")
+            # connect() hanya membuka koneksi awal, sedangkan loop_forever() menjaga trafik MQTT tetap berjalan.
             self.client.connect(self.broker, self.port, 60)
             self.client.loop_forever()
         except Exception as exc:
@@ -61,6 +63,7 @@ class MqttClient:
             # Semua subscribe yang dikumpulkan sebelum connect didaftarkan di sini.
             for topic, callback in self._subscriptions:
                 client.subscribe(topic)
+                # Setiap topic diarahkan ke callback spesifik, bukan satu handler global.
                 client.message_callback_add(topic, callback)
                 self._log(f"[MQTT] Subscribed: {topic}")
         else:
@@ -77,6 +80,7 @@ class MqttClient:
 
     def publish(self, topic, payload, retain=False):
         try:
+            # retain=False berarti broker tidak menyimpan pesan ini sebagai state terakhir topic.
             self.client.publish(topic, payload, retain=retain)
             self._log(f"[MQTT] Published: {topic} -> {payload}")
         except Exception as exc:

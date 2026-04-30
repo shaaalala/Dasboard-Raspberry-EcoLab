@@ -2,6 +2,7 @@ from PySide6.QtCore import QObject, Signal
 
 
 class LampBackend(QObject):
+    # lamp_changed membawa dua data sekaligus: nomor lampu dan status ON/OFF.
     lamp_changed = Signal(int, bool)
     mcu_status = Signal(bool)
 
@@ -31,6 +32,7 @@ class LampBackend(QObject):
         self.mqtt.subscribe(self.STATUS_TOPIC, self._on_mcu_status)
 
     def publish(self, lamp_index, state):
+        # Setiap lampu punya topic control sendiri, misalnya lamp1/control, lamp2/control, dst.
         topic = f"{self.BASE_TOPIC}{lamp_index}/control"
         payload = "ON" if state else "OFF"
         self.mqtt.publish(topic, payload)
@@ -38,6 +40,7 @@ class LampBackend(QObject):
 
     def _on_lamp_status(self, client, userdata, msg):
         try:
+            # Nomor lampu diekstrak dari nama topic, bukan dari payload.
             lamp_index = int(msg.topic.split("lamp")[1].split("/")[0])
         except (IndexError, ValueError):
             return

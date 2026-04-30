@@ -3,6 +3,7 @@ import subprocess
 class WifiBackend:
     def connect(self, ssid, password):
         try:
+            # Modul ini bergantung pada `nmcli`, jadi hanya relevan di Linux yang menyediakan NetworkManager.
             cmd = f"nmcli dev wifi connect '{ssid}' password '{password}'"
             result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
 

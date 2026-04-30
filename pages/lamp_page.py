@@ -42,6 +42,7 @@ class LampPage(QWidget):
             btn.setText(f"Lamp {i}\nOFF")
 
             btn.clicked.connect(
+                # idx=i diperlukan agar setiap lambda menyimpan nomor lampu yang benar.
                 lambda checked, idx=i: self.toggle_lamp(idx, checked)
             )
 
@@ -60,6 +61,7 @@ class LampPage(QWidget):
     # =========================
     def toggle_lamp(self, idx, state):
         if self.backend:
+            # Page hanya meneruskan aksi user; keputusan publish ada di backend.
             self.backend.publish(idx, state)
 
     # =========================
@@ -68,6 +70,7 @@ class LampPage(QWidget):
     def update_lamp(self, lamp_index, state):
         btn = self.buttons[lamp_index - 1]
 
+        # blockSignals mencegah update dari MQTT memicu clicked() lagi dan membuat loop.
         btn.blockSignals(True)
 
         btn.setChecked(state)

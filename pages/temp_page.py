@@ -23,6 +23,7 @@ class TempPage(QWidget):
         self.ui.btn_cool.clicked.connect(lambda: self.set_mode("COOL"))
         self.ui.btn_fan.clicked.connect(lambda: self.set_mode("FAN"))
 
+        # Semua perubahan dari backend dipantulkan lagi ke widget lewat signal-slot Qt.
         self.backend.ac_status_changed.connect(self.update_ac)
         self.backend.temp_changed.connect(self.update_temp)
         self.backend.mode_changed.connect(self.update_mode)
@@ -43,6 +44,7 @@ class TempPage(QWidget):
         self.backend.set_mode(mode)
 
     def update_ac(self, state):
+        # Saat status datang dari MQTT, tombol diubah tanpa memicu aksi user kedua kali.
         self.ui.btn_ac.blockSignals(True)
         self.ui.btn_ac.setChecked(state)
         self.ui.btn_ac.setIcon(self.icon_on if state else self.icon_off)
@@ -50,6 +52,7 @@ class TempPage(QWidget):
         self.ui.btn_ac.blockSignals(False)
 
     def update_temp(self, value):
+        # Halaman ini menyimpan suhu terakhir agar tombol +/- tahu nilai acuan berikutnya.
         self.current_temp = value
 
     def update_mode(self, mode):

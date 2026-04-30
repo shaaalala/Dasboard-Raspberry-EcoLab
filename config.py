@@ -12,6 +12,7 @@ MQTT_CONFIG_PATH = CONFIG_DIR / "mqtt_settings.json"
 DEFAULT_MQTT_CONFIG = {
     "active_profile": "laptop",
     "profiles": {
+        # Satu file JSON bisa memuat beberapa target broker.
         "ecolab": {
             "broker": "10.33.11.148",
             "port": 8883,
@@ -76,6 +77,7 @@ def ensure_mqtt_config() -> None:
 
 
 def load_mqtt_config() -> dict:
+    # Fungsi ini adalah pintu utama pembacaan config untuk seluruh aplikasi.
     ensure_mqtt_config()
 
     with MQTT_CONFIG_PATH.open("r", encoding="utf-8") as file:
@@ -105,6 +107,7 @@ def load_mqtt_config() -> dict:
         DEFAULT_MQTT_CONFIG["active_profile"],
     )
     if active_profile not in profiles:
+        # Fallback ini mencegah aplikasi crash bila nama profile aktif salah ketik.
         active_profile = DEFAULT_MQTT_CONFIG["active_profile"]
 
     # Output final selalu berupa 1 profile aktif yang siap dipakai oleh main.py.

@@ -21,6 +21,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
+        # Window dibuat frameless agar tampilan menyerupai panel HMI penuh.
         self.setWindowFlags(Qt.FramelessWindowHint)
 
         self.ui = Ui_MainWindow()
@@ -63,6 +64,7 @@ class MainWindow(QMainWindow):
         self.dragPos = None
 
     def show_home(self):
+        # stackedWidget dipakai sebagai container beberapa halaman aplikasi.
         self.ui.stackedWidget.setCurrentWidget(self.ui.home)
 
     def show_lamp(self):
@@ -87,10 +89,12 @@ class MainWindow(QMainWindow):
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
+            # Simpan posisi mouse global saat drag dimulai.
             self.dragPos = event.globalPosition().toPoint()
 
     def mouseMoveEvent(self, event):
         if event.buttons() == Qt.LeftButton and self.dragPos:
+            # Karena window tanpa title bar bawaan, perpindahan jendela dihitung manual.
             delta = event.globalPosition().toPoint() - self.dragPos
             self.move(self.pos() + delta)
             self.dragPos = event.globalPosition().toPoint()
@@ -108,5 +112,3 @@ if __name__ == "__main__":
     window.show()
 
     sys.exit(app.exec())
-
-#Test s

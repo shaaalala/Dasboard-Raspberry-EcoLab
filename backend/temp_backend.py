@@ -2,6 +2,7 @@ from PySide6.QtCore import QObject, Signal
 
 
 class TempBackend(QObject):
+    # Signal Qt dipakai untuk meneruskan data backend ke UI secara reaktif.
     ac_status_changed = Signal(bool)
     temp_changed = Signal(int)
     mode_changed = Signal(str)
@@ -42,6 +43,7 @@ class TempBackend(QObject):
         self.mqtt.subscribe(self.TOPIC_TEMP_B, self._on_sensor_temp)
 
     def set_ac(self, state):
+        # UI mengirim bool, tetapi perangkat di sisi MQTT memakai string ON/OFF.
         payload = "ON" if state else "OFF"
         self.mqtt.publish(self.TOPIC_AC_CONTROL, payload)
         self._log(f"[AC] {self.TOPIC_AC_CONTROL} -> {payload}")
@@ -57,6 +59,7 @@ class TempBackend(QObject):
         diff = value - self.current_temp
 
         if diff > 0:
+            # Kirim beberapa perintah karena AC diasumsikan punya tombol naik/turun, bukan set nilai langsung.
             for _ in range(diff):
                 self.mqtt.publish(self.TOPIC_AC_CONTROL, "TEMP_UP")
         elif diff < 0:
@@ -82,6 +85,7 @@ class TempBackend(QObject):
         self._log(f"[AC] Mode -> {self.current_mode}")
 
     def _on_ac_status(self, client, userdata, msg):
+        # Callback ini dipanggil otomatis oleh paho-mqtt saat topic status AC menerima pesan.
         state = msg.payload.decode().strip().upper() == "ON"
         self.ac_on = state
         self.ac_status_changed.emit(state)
@@ -99,4 +103,5 @@ class TempBackend(QObject):
 
         # Filter sederhana untuk menahan data sensor yang jelas tidak masuk akal.
         if -10 <= value <= 60:
+            # Backend meneruskan suhu sensor ke UI tanpa mengubah setpoint AC lokal.
             self.temp_changed.emit(int(value))
