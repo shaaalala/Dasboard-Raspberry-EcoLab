@@ -1,0 +1,21 @@
+.venv/
+__pycache__/
+*.py[cod]
+
+# Local secrets and credentials
+credentials/
+ca.crt
+*.crt
+.env
+.env.*
+
+# Build and archive artifacts
+*.rar
+*.zip
+*.7z
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

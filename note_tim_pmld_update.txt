@@ -1,0 +1,89 @@
+CATATAN UPDATE UNTUK TIM PMLD
+
+Tanggal update: 2026-04-29
+Folder project: PMLD ecolab
+
+Ringkasan update yang sudah dilakukan:
+
+1. Verifikasi struktur folder setelah project dipindah
+   Folder penting sudah dicek ada:
+   - assets/
+   - backend/
+   - config/
+   - credentials/
+   - pages/
+   - ui_py/
+
+2. Verifikasi working directory aplikasi
+   File: main.py
+   Kondisi saat ini:
+   - BASE_DIR = Path(__file__).resolve().parent
+   - os.chdir(BASE_DIR)
+   Ini penting supaya semua asset dan path relatif tetap mengarah ke folder project lokal.
+
+3. Verifikasi asset path
+   Asset utama sudah dicek tersedia:
+   - assets/bg.png
+   - assets/HOME.png
+   - assets/LAMP OFF.png
+   - assets/LAMP ON.png
+   - assets/AC OFF.png
+   - assets/AC ON.png
+
+4. Perbaikan loader config MQTT
+   File: config.py
+   Update yang dilakukan:
+   - path sertifikat relatif seperti credentials/ca.crt dan credentials/ca2.crt sekarang di-resolve ke path absolut berdasarkan folder project lokal
+   - ditambahkan validasi TLS agar aplikasi langsung memberi error yang jelas jika profile aktif memakai sertifikat yang tidak ada
+   Tujuan:
+   - mencegah path sertifikat masih menunjuk ke folder lama
+   - mempermudah debugging saat project dijalankan di lokasi baru
+
+5. Verifikasi file sertifikat lokal
+   Folder: credentials/
+   Kondisi saat ini:
+   - ca.crt ada
+   - ca2.crt ada
+   Artinya kedua profile MQTT sekarang punya file sertifikat yang dibutuhkan.
+
+6. Verifikasi profile MQTT
+   File: config/mqtt_settings.json
+   Kondisi saat ini:
+   - profile tersedia: ecolab dan laptop
+   - active_profile saat ini: laptop
+   Catatan:
+   - penggantian profile cukup lewat nilai active_profile
+   - tidak perlu konsep comment/uncomment di JSON
+
+7. Penambahan komentar kode
+   Komentar singkat sudah ditambahkan di file:
+   - main.py
+   - config.py
+   - backend/mqtt_client.py
+   - backend/lamp_backend.py
+   - backend/temp_backend.py
+   Tujuan komentar:
+   - menjelaskan alur startup
+   - menjelaskan fungsi resolver config
+   - menjelaskan pola subscribe/publish MQTT
+   - mempermudah onboarding anggota tim lain
+
+8. Verifikasi syntax Python
+   Sudah diuji dengan py_compile untuk file inti dan tidak ada error syntax.
+
+Hal yang sudah aman:
+   - project memakai path lokal folder ini sendiri
+   - sertifikat TLS untuk profile ecolab dan laptop tersedia
+   - config MQTT bisa dibaca dan di-resolve dengan benar
+   - file inti Python lulus compile check
+
+Hal yang masih disarankan untuk uji manual:
+   - jalankan python main.py
+   - cek icon dan background tampil
+   - cek koneksi MQTT benar-benar sukses
+   - cek tombol lamp bisa publish dan menerima status balik
+   - cek kontrol AC dan pembacaan suhu berjalan normal
+
+Catatan untuk perubahan berikutnya:
+   - bila ingin lebih rapi lagi, bisa dibuat helper path khusus agar semua akses asset/config terpusat
+   - bila ingin deployment ke Raspberry Pi/Linux, tetap perhatikan huruf besar-kecil nama file asset
