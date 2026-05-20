@@ -121,6 +121,28 @@ if __name__ == "__main__":
 
     # tampil loading overlay
     window.ui.loading_overlay.show()
+    # ====================================
+    # FADE TEXT ANIMATION
+    # ====================================
+
+    effect = QGraphicsOpacityEffect()
+
+    window.ui.loading_text.setGraphicsEffect(effect)
+
+    effect.setOpacity(0)
+
+    window.anim = QPropertyAnimation(
+        effect,
+        b"opacity"
+    )
+
+    window.anim.setDuration(3000)
+
+    window.anim.setStartValue(0)
+
+    window.anim.setEndValue(1)
+
+    window.anim.start()
 
     # hilangkan loading setelah 1.5 detik
     QTimer.singleShot(
