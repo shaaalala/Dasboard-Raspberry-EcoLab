@@ -1,12 +1,8 @@
 # -*- coding: utf-8 -*-
 
-################################################################################
-## FORM HOME UI
-################################################################################
-
 from PySide6.QtCore import (
-    QCoreApplication, QMetaObject, QRect,
-    QSize, Qt
+    QCoreApplication, QMetaObject,
+    QRect, QSize, Qt
 )
 
 from PySide6.QtGui import (
@@ -16,8 +12,8 @@ from PySide6.QtGui import (
 )
 
 from PySide6.QtWidgets import (
-    QApplication, QFrame, QHBoxLayout, QLabel,
-    QMainWindow, QPushButton, QSizePolicy,
+    QFrame, QHBoxLayout, QLabel,
+    QPushButton, QSizePolicy,
     QSpacerItem, QStackedWidget,
     QVBoxLayout, QWidget
 )
@@ -45,7 +41,7 @@ class TankWidget(QWidget):
         w = self.width()
         h = self.height()
 
-        # BODY TANK
+        # BODY
         painter.setBrush(QColor("#111F2C"))
         painter.setPen(QPen(QColor("#00C2FF"), 3))
 
@@ -58,10 +54,9 @@ class TankWidget(QWidget):
             35
         )
 
-        # WATER HEIGHT
+        # WATER
         fill_height = int((self.level / 100) * 250)
 
-        # WATER GRADIENT
         gradient = QLinearGradient(0, 0, 0, h)
 
         gradient.setColorAt(0, QColor("#00C2FF"))
@@ -79,7 +74,7 @@ class TankWidget(QWidget):
             30
         )
 
-        # TEXT %
+        # TEXT
         painter.setPen(QColor("white"))
 
         font = QFont("Consolas", 16)
@@ -106,8 +101,6 @@ class Ui_MainWindow(object):
             MainWindow.setObjectName(u"MainWindow")
 
         MainWindow.resize(1024, 600)
-        MainWindow.setMinimumSize(QSize(1024, 600))
-        MainWindow.setMaximumSize(QSize(1024, 600))
 
         # =====================================================
         # CENTRAL WIDGET
@@ -173,12 +166,13 @@ QLabel#desc_home{
         self.main_layout = QHBoxLayout(self.centralwidget)
 
         # =====================================================
-        # SIDEBAR
+        # MENU FRAME
         # =====================================================
 
         self.menu_frame = QFrame()
 
         self.menu_frame.setObjectName(u"menu_frame")
+
         self.menu_frame.setMinimumWidth(100)
         self.menu_frame.setMaximumWidth(100)
 
@@ -186,24 +180,36 @@ QLabel#desc_home{
 
         # HOME BUTTON
         self.btn_home = QPushButton()
+
+        self.btn_home.setObjectName(u"btn_home")
+
         self.btn_home.setIcon(QIcon("assets/HOME.png"))
         self.btn_home.setIconSize(QSize(40, 40))
+
         self.btn_home.setCheckable(True)
 
         self.menu_layout.addWidget(self.btn_home)
 
         # LAMP BUTTON
         self.btn_lamp = QPushButton()
+
+        self.btn_lamp.setObjectName(u"btn_lamp")
+
         self.btn_lamp.setIcon(QIcon("assets/LAMP OFF.png"))
         self.btn_lamp.setIconSize(QSize(40, 40))
+
         self.btn_lamp.setCheckable(True)
 
         self.menu_layout.addWidget(self.btn_lamp)
 
         # TEMP BUTTON
         self.btn_temp = QPushButton()
+
+        self.btn_temp.setObjectName(u"btn_temp")
+
         self.btn_temp.setIcon(QIcon("assets/AC OFF.png"))
         self.btn_temp.setIconSize(QSize(40, 40))
+
         self.btn_temp.setCheckable(True)
 
         self.menu_layout.addWidget(self.btn_temp)
@@ -213,12 +219,18 @@ QLabel#desc_home{
         self.main_layout.addWidget(self.menu_frame)
 
         # =====================================================
-        # CONTENT
+        # STACKED WIDGET
         # =====================================================
 
-        self.content = QWidget()
+        self.stackedWidget = QStackedWidget()
 
-        self.content_layout = QVBoxLayout(self.content)
+        # =====================================================
+        # HOME PAGE
+        # =====================================================
+
+        self.home = QWidget()
+
+        self.home_layout = QVBoxLayout(self.home)
 
         # TITLE
         self.title_home = QLabel("SELAMAT DATANG")
@@ -229,7 +241,7 @@ QLabel#desc_home{
         self.title_home.setFont(title_font)
         self.title_home.setAlignment(Qt.AlignCenter)
 
-        self.content_layout.addWidget(self.title_home)
+        self.home_layout.addWidget(self.title_home)
 
         # SUBTITLE
         self.subtitle_home = QLabel("HMI PORTABLE ECOLAB")
@@ -239,12 +251,12 @@ QLabel#desc_home{
         self.subtitle_home.setFont(sub_font)
         self.subtitle_home.setAlignment(Qt.AlignCenter)
 
-        self.content_layout.addWidget(self.subtitle_home)
+        self.home_layout.addWidget(self.subtitle_home)
 
         # TANK
         self.tank = TankWidget()
 
-        self.content_layout.addWidget(
+        self.home_layout.addWidget(
             self.tank,
             alignment=Qt.AlignCenter
         )
@@ -260,11 +272,18 @@ QLabel#desc_home{
         self.desc_home.setFont(desc_font)
         self.desc_home.setAlignment(Qt.AlignCenter)
 
-        self.content_layout.addWidget(self.desc_home)
+        self.home_layout.addWidget(self.desc_home)
 
-        self.content_layout.addStretch()
+        self.home_layout.addStretch()
 
-        self.main_layout.addWidget(self.content)
+        # ADD HOME PAGE
+        self.stackedWidget.addWidget(self.home)
+
+        # =====================================================
+        # ADD STACKED WIDGET
+        # =====================================================
+
+        self.main_layout.addWidget(self.stackedWidget)
 
         # =====================================================
         # TRANSLATE
