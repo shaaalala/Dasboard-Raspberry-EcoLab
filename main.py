@@ -16,7 +16,7 @@ from config import load_mqtt_config
 from pages.lamp_page import LampPage
 from pages.temp_page import TempPage
 from ui_py.ui_home import Ui_MainWindow
-from backend.wifi_backend import WifiBackend
+from ui_py.ui_menu import Ui_MenuPage
 
 BASE_DIR = Path(__file__).resolve().parent
 
@@ -25,13 +25,23 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        # Window dibuat frameless agar tampilan menyerupai panel HMI penuh.
         self.setWindowFlags(Qt.FramelessWindowHint)
 
+        # =========================
+        # UI HOME
+        # =========================
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
-        # Load profile MQTT aktif lalu buat 1 client yang dipakai semua page.
+        # =========================
+        # MENU PAGE
+        # =========================
+        self.menu_ui = Ui_MenuPage()
+        self.ui.stackedWidget.addWidget(self.menu_ui)
+
+        # =========================
+        # MQTT
+        # =========================
         self.mqtt_config = load_mqtt_config()
         self.mqtt = MqttClient(
             broker=self.mqtt_config["broker"],
@@ -43,33 +53,61 @@ class MainWindow(QMainWindow):
         )
         self.mqtt.start()
 
-        # Backend menangani logika MQTT dan state untuk masing-masing fitur.
+        # =========================
+        # BACKEND
+        # =========================
         self.lamp_backend = LampBackend(self.mqtt)
         self.temp_backend = TempBackend(self.mqtt)
 
         self.lamp_page = LampPage(self.lamp_backend)
         self.temp_page = TempPage(self.temp_backend)
 
-        # Page custom ditambahkan ke stackedWidget setelah halaman home bawaan UI.
         self.ui.stackedWidget.addWidget(self.lamp_page)
         self.ui.stackedWidget.addWidget(self.temp_page)
 
+        # DEFAULT PAGE
         self.ui.stackedWidget.setCurrentWidget(self.ui.home)
-        self.ui.btn_home.setChecked(True)
 
-        self.ui.btn_home.clicked.connect(self.show_home)
-        self.ui.btn_lamp.clicked.connect(self.show_lamp)
-        self.ui.btn_temp.clicked.connect(self.show_temp)
-
-        self.ui.btn_menu.clicked.connect(self.toggle_menu)
-        self.menu_expanded = False
-
+        # =========================
+        # SIGNAL HOME
+        # =========================
+        self.ui.btn_menu_home.clicked.connect(self.show_menu)
         self.ui.btn_exit.clicked.connect(self.close)
+
+        # =========================
+        # SIGNAL MENU
+        # =========================
+        self.menu_ui.btn_lamp.clicked.connect(self.show_lamp)
+        self.menu_ui.btn_ac.clicked.connect(self.show_temp)
+        self.menu_ui.btn_undo.clicked.connect(self.show_home)
+        self.menu_ui.btn_exit.clicked.connect(self.close)
+
+        # =========================
+        # LOADING EFFECT
+        # =========================
+        effect = QGraphicsOpacityEffect()
+        self.ui.loading_text.setGraphicsEffect(effect)
+        effect.setOpacity(0)
+
+        self.anim = QPropertyAnimation(effect, b"opacity")
+        self.anim.setDuration(3000)
+        self.anim.setStartValue(0)
+        self.anim.setEndValue(1)
+        self.anim.start()
+
+        QTimer.singleShot(3500, self.ui.loading_overlay.hide)
+
+        # DRAG WINDOW
         self.dragPos = None
 
+    # =========================
+    # NAVIGATION
+    # =========================
     def show_home(self):
-        # stackedWidget dipakai sebagai container beberapa halaman aplikasi.
         self.ui.stackedWidget.setCurrentWidget(self.ui.home)
+
+    def show_menu(self):
+        self.ui.stackedWidget.setCurrentWidget(self.menu_ui)
 
     def show_lamp(self):
         self.ui.stackedWidget.setCurrentWidget(self.lamp_page)
@@ -77,28 +115,15 @@ class MainWindow(QMainWindow):
     def show_temp(self):
         self.ui.stackedWidget.setCurrentWidget(self.temp_page)
 
-    def toggle_menu(self):
-        start_width = self.ui.menu_frame.width()
-        end_width = 220 if not self.menu_expanded else 0
-
-        # Sidebar dibuka dan ditutup dengan animasi lebar maksimum.
-        self.animation = QPropertyAnimation(self.ui.menu_frame, b"maximumWidth")
-        self.animation.setDuration(300)
-        self.animation.setStartValue(start_width)
-        self.animation.setEndValue(end_width)
-        self.animation.setEasingCurve(QEasingCurve.InOutQuart)
-        self.animation.start()
-
-        self.menu_expanded = not self.menu_expanded
-
+    # =========================
+    # DRAG WINDOW
+    # =========================
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
-            # Simpan posisi mouse global saat drag dimulai.
             self.dragPos = event.globalPosition().toPoint()
 
     def mouseMoveEvent(self, event):
         if event.buttons() == Qt.LeftButton and self.dragPos:
-            # Karena window tanpa title bar bawaan, perpindahan jendela dihitung manual.
             delta = event.globalPosition().toPoint() - self.dragPos
             self.move(self.pos() + delta)
             self.dragPos = event.globalPosition().toPoint()
@@ -109,62 +134,14 @@ class MainWindow(QMainWindow):
 
 if __name__ == "__main__":
 
-    # Paksa working directory ke folder project
     os.chdir(BASE_DIR)
 
     app = QApplication(sys.argv)
 
-
-    # ====================================
-    # MAIN WINDOW
-    # ====================================
-
     window = MainWindow()
-
     window.show()
 
-    QTimer.singleShot(
-        100,
-        window.ui.loading_overlay.show
-    )
+    QTimer.singleShot(100, window.ui.loading_overlay.show)
+    QTimer.singleShot(100, window.ui.loading_overlay.raise_)
 
-    QTimer.singleShot(
-        100,
-        window.ui.loading_overlay.raise_
-    )
-    # ====================================
-    # FADE TEXT ANIMATION
-    # ====================================
-
-    effect = QGraphicsOpacityEffect()
-
-    window.ui.loading_text.setGraphicsEffect(effect)
-
-    effect.setOpacity(0)
-
-    window.anim = QPropertyAnimation(
-        effect,
-        b"opacity"
-    )
-
-    window.anim.setDuration(3500)
-
-    window.anim.setStartValue(0)
-
-    window.anim.setEndValue(1)
-
-    window.anim.start()
-
-    # hilangkan loading setelah 1.5 detik
-    QTimer.singleShot(
-        4500,
-        window.ui.loading_overlay.hide
-    )
-
-sys.exit(app.exec())
-
-
-    #aesrdfghjnjml.;
-    #adsdfghjkl;'saZxfdvgbjhnkm
-    #hahjasbhdbsh
-    #gqgqfghqfa
+    sys.exit(app.exec())
