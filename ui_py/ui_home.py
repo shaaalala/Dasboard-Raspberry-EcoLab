@@ -283,7 +283,7 @@ QLabel#desc_home{
         MainWindow.setWindowTitle(
             QCoreApplication.translate(
                 "MainWindow",
-                u"ECOLAB HMI",
+                "ECOLAB HMI",
                 None
             )
         )
