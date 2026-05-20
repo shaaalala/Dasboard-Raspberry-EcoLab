@@ -28,7 +28,7 @@ class LoadingScreen(QWidget):
                 }}
 
                 QLabel{{
-                    color:{self.selected_color};
+                    color:#00C2FF;
                 }}
 
                 """)
@@ -47,8 +47,8 @@ class LoadingScreen(QWidget):
 
         self.logo.setPixmap(
             pixmap.scaled(
-                220,
-                220,
+                440,
+                440,
                 Qt.KeepAspectRatio,
                 Qt.SmoothTransformation
             )
@@ -64,7 +64,7 @@ class LoadingScreen(QWidget):
 
         self.text = QLabel("")
 
-        font = QFont("Consolas", 18)
+        font = QFont("LONDON", 25, QFont.Bold)
 
         self.text.setFont(font)
 
