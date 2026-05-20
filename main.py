@@ -2,7 +2,7 @@ import os
 import sys
 from pathlib import Path
 
-from PySide6.QtCore import QEasingCurve, QPropertyAnimation, Qt
+from PySide6.QtCore import QEasingCurve, QPropertyAnimation, Qt, QTimer
 from PySide6.QtWidgets import QApplication, QMainWindow
 
 from backend.lamp_backend import LampBackend
@@ -12,6 +12,7 @@ from config import load_mqtt_config
 from pages.lamp_page import LampPage
 from pages.temp_page import TempPage
 from ui_py.ui_home import Ui_MainWindow
+from ui_py.ui_loading import LoadingScreen
 from backend.wifi_backend import WifiBackend
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -104,15 +105,36 @@ class MainWindow(QMainWindow):
 
 
 if __name__ == "__main__":
-    # Paksa working directory ke folder project agar semua path relatif tetap valid.
+
+    # Paksa working directory ke folder project
     os.chdir(BASE_DIR)
+
     app = QApplication(sys.argv)
 
+    # ====================================
+    # LOADING SCREEN
+    # ====================================
+
+    loading = LoadingScreen()
+
+    loading.show()
+
+    # ====================================
+    # MAIN WINDOW
+    # ====================================
+
     window = MainWindow()
-    window.show()
+
+    # Delay 1.5 detik
+    QTimer.singleShot(
+        1500,
+        lambda: (
+            loading.close(),
+            window.show()
+        )
+    )
 
     sys.exit(app.exec())
-
 
 
     #aesrdfghjnjml.;
