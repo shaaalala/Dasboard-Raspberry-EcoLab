@@ -12,7 +12,6 @@ from config import load_mqtt_config
 from pages.lamp_page import LampPage
 from pages.temp_page import TempPage
 from ui_py.ui_home import Ui_MainWindow
-from ui_py.ui_loading import LoadingScreen
 from backend.wifi_backend import WifiBackend
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -111,30 +110,25 @@ if __name__ == "__main__":
 
     app = QApplication(sys.argv)
 
-    # ====================================
-    # LOADING SCREEN
-    # ====================================
-
-    loading = LoadingScreen()
-
-    loading.show()
 
     # ====================================
     # MAIN WINDOW
     # ====================================
 
-    window = MainWindow()
+   window = MainWindow()
 
-    # Delay 1.5 detik
-    QTimer.singleShot(
-        1500,
-        lambda: (
-            loading.close(),
-            window.show()
-        )
-    )
+window.show()
 
-    sys.exit(app.exec())
+# tampil loading overlay
+window.ui.loading_overlay.show()
+
+# hilangkan loading setelah 1.5 detik
+QTimer.singleShot(
+    3500,
+    window.ui.loading_overlay.hide
+)
+
+sys.exit(app.exec())
 
 
     #aesrdfghjnjml.;

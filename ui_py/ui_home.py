@@ -22,9 +22,12 @@ from PySide6.QtWidgets import (
     QHBoxLayout,
     QLabel,
     QPushButton,
+    QSizePolicy,
+    QSpacerItem,
     QStackedWidget,
     QVBoxLayout,
-    QWidget
+    QWidget,
+     QGraphicsOpacityEffect
 )
 
 # =========================================================
@@ -265,7 +268,50 @@ QLabel#desc_home{
         # =====================================================
         # TRANSLATE
         # =====================================================
+                # =====================================================
+        # LOADING OVERLAY
+        # =====================================================
 
+        self.loading_overlay = QFrame(self.centralwidget)
+
+        self.loading_overlay.setGeometry(0, 0, 1024, 600)
+
+        self.loading_overlay.setStyleSheet("""
+QFrame{
+    background-color:#0D1820;
+}
+QLabel{
+    color:#00C2FF;
+}
+""")
+
+        self.loading_layout = QVBoxLayout(self.loading_overlay)
+
+        self.loading_layout.setAlignment(Qt.AlignCenter)
+
+        # LOGO
+        self.loading_logo = QLabel()
+
+        self.loading_logo.setPixmap(
+            QIcon("assets/ECOLABlogo.png").pixmap(220, 220)
+        )
+
+        self.loading_logo.setAlignment(Qt.AlignCenter)
+
+        self.loading_layout.addWidget(self.loading_logo)
+
+        # TEXT
+        self.loading_text = QLabel("INITIALIZING SYSTEM...")
+
+        font = QFont("Consolas", 18)
+        font.setBold(True)
+
+        self.loading_text.setFont(font)
+
+        self.loading_text.setAlignment(Qt.AlignCenter)
+
+        self.loading_layout.addWidget(self.loading_text)
+        
         self.retranslateUi(MainWindow)
 
         QMetaObject.connectSlotsByName(MainWindow)
