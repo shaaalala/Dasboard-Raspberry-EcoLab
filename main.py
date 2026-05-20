@@ -123,8 +123,15 @@ if __name__ == "__main__":
 
     window.show()
 
-    # tampil loading overlay
-    window.ui.loading_overlay.show()
+    QTimer.singleShot(
+        100,
+        window.ui.loading_overlay.show
+    )
+
+    QTimer.singleShot(
+        100,
+        window.ui.loading_overlay.raise_
+    )
     # ====================================
     # FADE TEXT ANIMATION
     # ====================================
@@ -140,7 +147,7 @@ if __name__ == "__main__":
         b"opacity"
     )
 
-    window.anim.setDuration(3000)
+    window.anim.setDuration(3500)
 
     window.anim.setStartValue(0)
 
@@ -150,7 +157,7 @@ if __name__ == "__main__":
 
     # hilangkan loading setelah 1.5 detik
     QTimer.singleShot(
-        3500,
+        4500,
         window.ui.loading_overlay.hide
     )
 

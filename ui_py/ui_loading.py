@@ -1,10 +1,6 @@
 from PySide6.QtCore import Qt, QTimer
 from PySide6.QtGui import QFont, QPixmap
-from PySide6.QtWidgets import (
-    QWidget,
-    QLabel,
-    QVBoxLayout
-)
+from PySide6.QtWidgets import QWidget, QLabel, QFrame
 
 
 class LoadingScreen(QWidget):
@@ -14,37 +10,39 @@ class LoadingScreen(QWidget):
         super().__init__()
 
         self.setWindowTitle("Loading")
-
         self.resize(1024, 600)
 
-        self.setStyleSheet("""
+        # ============================================
+        # OVERLAY (ABSOLUTE, NO LAYOUT)
+        # ============================================
 
-        QWidget{
-            background-color:black;
-        }
+        self.loading_overlay = QFrame(self)
+        self.loading_overlay.setGeometry(0, 0, self.width(), self.height())
+        self.loading_overlay.setAttribute(Qt.WA_StyledBackground, True)
+        self.loading_overlay.raise_()
 
-        QLabel{
-            color:#00C2FF;
-        }
-
+        self.loading_overlay.setStyleSheet("""
+            QFrame{
+                background-color:black;
+            }
+            QLabel{
+                color:#00C2FF;
+                background:transparent;
+            }
         """)
-
-        layout = QVBoxLayout(self)
-
-        layout.setAlignment(Qt.AlignCenter)
 
         # ============================================
         # LOGO
         # ============================================
 
-        self.logo = QLabel()
+        self.logo = QLabel(self.loading_overlay)
 
         pixmap = QPixmap("assets/ECOLABlogo.png")
 
         self.logo.setPixmap(
             pixmap.scaled(
-                440,
-                440,
+                600,
+                600,
                 Qt.KeepAspectRatio,
                 Qt.SmoothTransformation
             )
@@ -52,37 +50,64 @@ class LoadingScreen(QWidget):
 
         self.logo.setAlignment(Qt.AlignCenter)
 
-        layout.addWidget(self.logo)
+        self.logo.setGeometry(
+            int(self.width()/2 - 300),
+            80,
+            600,
+            600
+        )
 
         # ============================================
         # TEXT
         # ============================================
 
-        self.text = QLabel("")
+        self.text = QLabel(self.loading_overlay)
 
-        font = QFont("LONDON", 25, QFont.Bold)
-
+        font = QFont("LONDON", 80, QFont.Bold)
         self.text.setFont(font)
 
         self.text.setAlignment(Qt.AlignCenter)
 
-        layout.addWidget(self.text)
+        self.text.setGeometry(
+            0,
+            420,
+            self.width(),
+            120
+        )
 
         # ============================================
-        # ANIMATION TEXT
+        # ANIMATION
         # ============================================
 
-        self.full_text = "ECOLAB DASHBOARD"
-
+        self.full_text = "ECOLAB"
         self.current_text = ""
-
         self.index = 0
 
         self.timer = QTimer()
-
         self.timer.timeout.connect(self.update_text)
-
         self.timer.start(80)
+
+    # ============================================
+    # FORCE FULLSCREEN FIX
+    # ============================================
+
+    def resizeEvent(self, event):
+
+        self.loading_overlay.setGeometry(0, 0, self.width(), self.height())
+
+        self.logo.setGeometry(
+            int(self.width()/2 - 300),
+            80,
+            600,
+            600
+        )
+
+        self.text.setGeometry(
+            0,
+            420,
+            self.width(),
+            120
+        )
 
     # ============================================
     # TEXT ANIMATION
@@ -93,11 +118,9 @@ class LoadingScreen(QWidget):
         if self.index < len(self.full_text):
 
             self.current_text += self.full_text[self.index]
-
             self.text.setText(self.current_text)
 
             self.index += 1
 
         else:
-
             self.timer.stop()

@@ -5,7 +5,8 @@ from PySide6.QtCore import (
     QMetaObject,
     QRect,
     QSize,
-    Qt
+    Qt,
+    QTimer
 )
 
 from PySide6.QtGui import (
@@ -14,7 +15,8 @@ from PySide6.QtGui import (
     QIcon,
     QLinearGradient,
     QPainter,
-    QPen
+    QPen,
+    QPixmap
 )
 
 from PySide6.QtWidgets import (
@@ -268,42 +270,74 @@ QLabel#desc_home{
         # =====================================================
         # TRANSLATE
         # =====================================================
-                # =====================================================
+                # ============================================
         # LOADING OVERLAY
-        # =====================================================
+        # ============================================
+
+        from PySide6.QtCore import QTimer
 
         self.loading_overlay = QFrame(self.centralwidget)
+        self.loading_overlay.setParent(self.centralwidget)
+
+        self.loading_overlay.raise_()
+
+        self.loading_overlay.resize(
+            self.centralwidget.width(),
+            self.centralwidget.height()
+)
 
         self.loading_overlay.setGeometry(0, 0, 1024, 600)
 
+
         self.loading_overlay.setStyleSheet("""
-QFrame{
-    background-color:#0D1820;
-}
-QLabel{
-    color:#00C2FF;
-}
-""")
+            QWidget{
+                background-color:#0A0F14;
+            }
+
+            QLabel{
+                color:#00C2FF;
+                background:transparent;
+            }
+        """)
+
+        self.loading_overlay.raise_()
 
         self.loading_layout = QVBoxLayout(self.loading_overlay)
 
         self.loading_layout.setAlignment(Qt.AlignCenter)
 
+        self.loading_layout.setSpacing(25)
+
+        # ============================================
         # LOGO
+        # ============================================
+
         self.loading_logo = QLabel()
 
+        pixmap = QPixmap("assets/ECOLABlogo.png")
+
         self.loading_logo.setPixmap(
-            QIcon("assets/ECOLABlogo.png").pixmap(220, 220)
+            pixmap.scaled(
+                420,
+                420,
+                Qt.KeepAspectRatio,
+                Qt.SmoothTransformation
+            )
         )
+
+        self.loading_logo.setMinimumSize(420, 420)
 
         self.loading_logo.setAlignment(Qt.AlignCenter)
 
         self.loading_layout.addWidget(self.loading_logo)
 
+        # ============================================
         # TEXT
+        # ============================================
+
         self.loading_text = QLabel("")
 
-        font = QFont("LONDON", 25)
+        font = QFont("Consolas", 24)
         font.setBold(True)
 
         self.loading_text.setFont(font)
@@ -311,9 +345,10 @@ QLabel{
         self.loading_text.setAlignment(Qt.AlignCenter)
 
         self.loading_layout.addWidget(self.loading_text)
-                # ====================================
-        # TYPEWRITER ANIMATION
-        # ====================================
+
+        # ============================================
+        # ANIMATION TEXT
+        # ============================================
 
         self.full_text = "ECOLAB DASHBOARD"
 
@@ -325,7 +360,7 @@ QLabel{
 
         self.text_timer.timeout.connect(self.update_loading_text)
 
-        self.text_timer.start(80)
+        self.text_timer.start(70)
 
         self.retranslateUi(MainWindow)
 
@@ -351,6 +386,19 @@ QLabel{
         else:
 
             self.text_timer.stop()
+        # ============================================
+    # TEXT ANIMATION
+    # ============================================
+
+    def update_loading_text(self):
+
+        if self.text_index < len(self.full_text):
+
+            self.current_text += self.full_text[self.text_index]
+
+            self.loading_text.setText(self.current_text)
+
+            self.text_index += 1
 
     def retranslateUi(self, MainWindow):
 
