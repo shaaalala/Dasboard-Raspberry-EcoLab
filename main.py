@@ -115,18 +115,18 @@ if __name__ == "__main__":
     # MAIN WINDOW
     # ====================================
 
-   window = MainWindow()
+    window = MainWindow()
 
-window.show()
+    window.show()
 
-# tampil loading overlay
-window.ui.loading_overlay.show()
+    # tampil loading overlay
+    window.ui.loading_overlay.show()
 
-# hilangkan loading setelah 1.5 detik
-QTimer.singleShot(
-    3500,
-    window.ui.loading_overlay.hide
-)
+    # hilangkan loading setelah 1.5 detik
+    QTimer.singleShot(
+        3500,
+        window.ui.loading_overlay.hide
+    )
 
 sys.exit(app.exec())
 
