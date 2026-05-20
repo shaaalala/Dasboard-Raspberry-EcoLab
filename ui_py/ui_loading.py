@@ -1,6 +1,5 @@
 from PySide6.QtCore import Qt, QTimer
-from PySide6.QtGui import QFont, QPixmap, QColor
-from PySide6.QtWidgets import QColorDialog
+from PySide6.QtGui import QFont, QPixmap
 from PySide6.QtWidgets import (
     QWidget,
     QLabel,
@@ -13,25 +12,22 @@ class LoadingScreen(QWidget):
     def __init__(self):
 
         super().__init__()
-        color = QColorDialog.getColor()
-
-        self.selected_color = color.name()
 
         self.setWindowTitle("Loading")
 
         self.resize(1024, 600)
 
-        self.setStyleSheet(f"""
+        self.setStyleSheet("""
 
-                QWidget{{
-                    background-color:black;
-                }}
+        QWidget{
+            background-color:black;
+        }
 
-                QLabel{{
-                    color:#00C2FF;
-                }}
+        QLabel{
+            color:#00C2FF;
+        }
 
-                """)
+        """)
 
         layout = QVBoxLayout(self)
 
@@ -86,7 +82,11 @@ class LoadingScreen(QWidget):
 
         self.timer.timeout.connect(self.update_text)
 
-        self.timer.start(60)
+        self.timer.start(80)
+
+    # ============================================
+    # TEXT ANIMATION
+    # ============================================
 
     def update_text(self):
 
@@ -97,3 +97,7 @@ class LoadingScreen(QWidget):
             self.text.setText(self.current_text)
 
             self.index += 1
+
+        else:
+
+            self.timer.stop()

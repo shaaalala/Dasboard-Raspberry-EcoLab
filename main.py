@@ -3,7 +3,11 @@ import sys
 from pathlib import Path
 
 from PySide6.QtCore import QEasingCurve, QPropertyAnimation, Qt, QTimer
-from PySide6.QtWidgets import QApplication, QMainWindow
+from from PySide6.QtWidgets import (
+    QApplication,
+    QMainWindow,
+    QGraphicsOpacityEffect
+)
 
 from backend.lamp_backend import LampBackend
 from backend.mqtt_client import MqttClient
