@@ -242,13 +242,6 @@ QLabel#desc_home{
 
         self.home_layout.addWidget(self.subtitle_home)
 
-        # TANK
-        self.tank = TankWidget()
-
-        self.home_layout.addWidget(
-            self.tank,
-            alignment=Qt.AlignCenter
-        )
 
         # DESCRIPTION
         self.desc_home = QLabel(
