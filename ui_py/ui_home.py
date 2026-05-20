@@ -1,21 +1,30 @@
 # -*- coding: utf-8 -*-
 
 from PySide6.QtCore import (
-    QCoreApplication, QMetaObject,
-    QRect, QSize, Qt
+    QCoreApplication,
+    QMetaObject,
+    QRect,
+    QSize,
+    Qt
 )
 
 from PySide6.QtGui import (
-    QColor, QFont, QIcon,
-    QLinearGradient, QPainter,
+    QColor,
+    QFont,
+    QIcon,
+    QLinearGradient,
+    QPainter,
     QPen
 )
 
 from PySide6.QtWidgets import (
-    QFrame, QHBoxLayout, QLabel,
-    QPushButton, QSizePolicy,
-    QSpacerItem, QStackedWidget,
-    QVBoxLayout, QWidget
+    QFrame,
+    QHBoxLayout,
+    QLabel,
+    QPushButton,
+    QStackedWidget,
+    QVBoxLayout,
+    QWidget
 )
 
 
@@ -74,7 +83,7 @@ class TankWidget(QWidget):
             30
         )
 
-        # TEXT
+        # TEXT %
         painter.setPen(QColor("white"))
 
         font = QFont("Consolas", 16)
@@ -121,6 +130,11 @@ QFrame#menu_frame{
     border-right:2px solid #00C2FF;
 }
 
+QFrame#topbar{
+    background-color:#111F2C;
+    border-bottom:2px solid #00C2FF;
+}
+
 QPushButton{
     border:none;
     border-radius:15px;
@@ -160,10 +174,48 @@ QLabel#desc_home{
         MainWindow.setCentralWidget(self.centralwidget)
 
         # =====================================================
-        # MAIN LAYOUT
+        # TOPBAR
         # =====================================================
 
-        self.main_layout = QHBoxLayout(self.centralwidget)
+        self.topbar = QFrame()
+
+        self.topbar.setObjectName(u"topbar")
+
+        self.topbar.setMinimumHeight(60)
+
+        self.topbar_layout = QHBoxLayout(self.topbar)
+
+        # MENU BUTTON
+        self.btn_menu = QPushButton("☰")
+
+        self.btn_menu.setObjectName(u"btn_menu")
+
+        self.btn_menu.setMinimumSize(50, 50)
+
+        self.topbar_layout.addWidget(self.btn_menu)
+
+        self.topbar_layout.addStretch()
+
+        # EXIT BUTTON
+        self.btn_exit = QPushButton("✕")
+
+        self.btn_exit.setObjectName(u"btn_exit")
+
+        self.btn_exit.setMinimumSize(50, 50)
+
+        self.topbar_layout.addWidget(self.btn_exit)
+
+        # =====================================================
+        # MAIN VERTICAL LAYOUT
+        # =====================================================
+
+        self.vertical_layout = QVBoxLayout(self.centralwidget)
+
+        self.vertical_layout.addWidget(self.topbar)
+
+        self.main_layout = QHBoxLayout()
+
+        self.vertical_layout.addLayout(self.main_layout)
 
         # =====================================================
         # MENU FRAME
@@ -184,6 +236,7 @@ QLabel#desc_home{
         self.btn_home.setObjectName(u"btn_home")
 
         self.btn_home.setIcon(QIcon("assets/HOME.png"))
+
         self.btn_home.setIconSize(QSize(40, 40))
 
         self.btn_home.setCheckable(True)
@@ -196,6 +249,7 @@ QLabel#desc_home{
         self.btn_lamp.setObjectName(u"btn_lamp")
 
         self.btn_lamp.setIcon(QIcon("assets/LAMP OFF.png"))
+
         self.btn_lamp.setIconSize(QSize(40, 40))
 
         self.btn_lamp.setCheckable(True)
@@ -208,6 +262,7 @@ QLabel#desc_home{
         self.btn_temp.setObjectName(u"btn_temp")
 
         self.btn_temp.setIcon(QIcon("assets/AC OFF.png"))
+
         self.btn_temp.setIconSize(QSize(40, 40))
 
         self.btn_temp.setCheckable(True)
@@ -224,6 +279,8 @@ QLabel#desc_home{
 
         self.stackedWidget = QStackedWidget()
 
+        self.main_layout.addWidget(self.stackedWidget)
+
         # =====================================================
         # HOME PAGE
         # =====================================================
@@ -236,9 +293,11 @@ QLabel#desc_home{
         self.title_home = QLabel("SELAMAT DATANG")
 
         title_font = QFont("Consolas", 30)
+
         title_font.setBold(True)
 
         self.title_home.setFont(title_font)
+
         self.title_home.setAlignment(Qt.AlignCenter)
 
         self.home_layout.addWidget(self.title_home)
@@ -249,6 +308,7 @@ QLabel#desc_home{
         sub_font = QFont("Consolas", 18)
 
         self.subtitle_home.setFont(sub_font)
+
         self.subtitle_home.setAlignment(Qt.AlignCenter)
 
         self.home_layout.addWidget(self.subtitle_home)
@@ -270,20 +330,15 @@ QLabel#desc_home{
         desc_font = QFont("Consolas", 12)
 
         self.desc_home.setFont(desc_font)
+
         self.desc_home.setAlignment(Qt.AlignCenter)
 
         self.home_layout.addWidget(self.desc_home)
 
         self.home_layout.addStretch()
 
-        # ADD HOME PAGE
+        # ADD PAGE
         self.stackedWidget.addWidget(self.home)
-
-        # =====================================================
-        # ADD STACKED WIDGET
-        # =====================================================
-
-        self.main_layout.addWidget(self.stackedWidget)
 
         # =====================================================
         # TRANSLATE
