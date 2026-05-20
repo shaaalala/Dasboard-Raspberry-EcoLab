@@ -301,9 +301,9 @@ QLabel{
         self.loading_layout.addWidget(self.loading_logo)
 
         # TEXT
-        self.loading_text = QLabel("INITIALIZING SYSTEM...")
+        self.loading_text = QLabel("")
 
-        font = QFont("Consolas", 18)
+        font = QFont("LONDON", 25)
         font.setBold(True)
 
         self.loading_text.setFont(font)
@@ -311,7 +311,22 @@ QLabel{
         self.loading_text.setAlignment(Qt.AlignCenter)
 
         self.loading_layout.addWidget(self.loading_text)
-        
+                # ====================================
+        # TYPEWRITER ANIMATION
+        # ====================================
+
+        self.full_text = "ECOLAB DASHBOARD"
+
+        self.current_text = ""
+
+        self.text_index = 0
+
+        self.text_timer = QTimer()
+
+        self.text_timer.timeout.connect(self.update_loading_text)
+
+        self.text_timer.start(80)
+
         self.retranslateUi(MainWindow)
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -319,6 +334,23 @@ QLabel{
     # =========================================================
     # RETRANSLATE
     # =========================================================
+        # ====================================
+    # LOADING TEXT ANIMATION
+    # ====================================
+
+    def update_loading_text(self):
+
+        if self.text_index < len(self.full_text):
+
+            self.current_text += self.full_text[self.text_index]
+
+            self.loading_text.setText(self.current_text)
+
+            self.text_index += 1
+
+        else:
+
+            self.text_timer.stop()
 
     def retranslateUi(self, MainWindow):
 
