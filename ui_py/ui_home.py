@@ -67,7 +67,6 @@ QPushButton:hover{
     background-color:#00C2FF;
 }
 
-/* FIXED EXIT BUTTON */
 QPushButton#btn_exit{
     background-color:#1A3040;
     color:red;
@@ -94,7 +93,7 @@ QLabel{
         self.vertical_layout = QVBoxLayout(self.centralwidget)
 
         # =========================
-        # TOPBAR (FIXED STABLE)
+        # TOPBAR
         # =========================
         self.topbar = QFrame()
         self.topbar.setObjectName("topbar")
@@ -105,14 +104,46 @@ QLabel{
         self.topbar_layout.setContentsMargins(10, 5, 10, 5)
         self.topbar_layout.setSpacing(10)
 
-        self.topbar_layout.addWidget(self.btn_menu if hasattr(self, "btn_menu") else QLabel())
+        # MENU (kalau ada)
+        self.topbar_layout.addWidget(
+            self.btn_menu if hasattr(self, "btn_menu") else QLabel()
+        )
 
         self.topbar_layout.addStretch()
 
+        # =========================
+        # UNDO BUTTON
+        # =========================
+        self.btn_undo = QPushButton("⟲")
+        self.btn_undo.setMinimumSize(50, 50)
+
+        self.btn_undo.setStyleSheet("""
+QPushButton{
+    background-color:#1A3040;
+    color:orange;
+    font-size:28px;
+    font-weight:bold;
+    border-radius:10px;
+}
+QPushButton:hover{
+    background-color:#2A3A4A;
+}
+""")
+
+        # =========================
+        # EXIT BUTTON
+        # =========================
         self.btn_exit = QPushButton("✕")
         self.btn_exit.setObjectName("btn_exit")
         self.btn_exit.setMinimumSize(50, 50)
 
+        # CLOSE WINDOW ACTION
+        self.btn_exit.clicked.connect(MainWindow.close)
+
+        # =========================
+        # ADD TO TOPBAR
+        # =========================
+        self.topbar_layout.addWidget(self.btn_undo)
         self.topbar_layout.addWidget(self.btn_exit)
 
         self.vertical_layout.addWidget(self.topbar)
@@ -180,7 +211,6 @@ QLabel{
         self.desc_home.setFont(QFont("Consolas", 12))
         self.home_layout.addWidget(self.desc_home)
 
-        # MENU BUTTON
         self.btn_menu_home = QPushButton("MENU")
         self.btn_menu_home.setMinimumSize(260, 70)
 
@@ -188,7 +218,7 @@ QLabel{
 QPushButton{
     background-color:#00C2FF;
     color:#0D1820;
-    font-size:20px;
+    font-size:28px;
     font-weight:bold;
     border-radius:12px;
 }
@@ -198,7 +228,6 @@ QPushButton:hover{
 """)
 
         self.home_layout.addWidget(self.btn_menu_home, alignment=Qt.AlignCenter)
-
         self.home_layout.addStretch()
 
         self.stackedWidget.addWidget(self.home)
@@ -208,6 +237,7 @@ QPushButton:hover{
         # =========================
         self.loading_overlay = QFrame(self.centralwidget)
         self.loading_overlay.setGeometry(0, 0, 1024, 600)
+
         self.loading_overlay.setStyleSheet("""
 QFrame{
     background-color:#0A0F14;
