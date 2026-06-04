@@ -78,8 +78,8 @@ font-weight: bold;
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.btn_ac.sizePolicy().hasHeightForWidth())
         self.btn_ac.setSizePolicy(sizePolicy)
-        self.btn_ac.setMinimumSize(QSize(100, 100))
-        self.btn_ac.setMaximumSize(QSize(100, 100))
+        self.btn_ac.setMinimumSize(QSize(180, 180))
+        self.btn_ac.setMaximumSize(QSize(180, 180))
         self.btn_ac.setStyleSheet(u"\n"
 "QPushButton {\n"
 "    background-color: #bdc3c7;\n"
@@ -92,7 +92,7 @@ font-weight: bold;
         icon = QIcon()
         icon.addFile(u"assets/AC OFF.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.btn_ac.setIcon(icon)
-        self.btn_ac.setIconSize(QSize(100, 100))
+        self.btn_ac.setIconSize(QSize(150, 150))
         self.btn_ac.setCheckable(True)
 
         self.horizontalLayout.addWidget(self.btn_ac)

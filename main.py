@@ -97,8 +97,17 @@ class MainWindow(QMainWindow):
 
         QTimer.singleShot(3500, self.ui.loading_overlay.hide)
 
-        # DRAG WINDOW
         self.dragPos = None
+
+    # =========================
+    # FIX INI HARUS DI LUAR __init__
+    # =========================
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+
+        if hasattr(self.ui, "loading_overlay"):
+            self.ui.loading_overlay.setGeometry(self.rect())
+            self.ui.loading_overlay.raise_()
 
     # =========================
     # NAVIGATION
@@ -116,18 +125,14 @@ class MainWindow(QMainWindow):
         self.ui.stackedWidget.setCurrentWidget(self.temp_page)
 
     def go_back(self):
-
         current = self.ui.stackedWidget.currentWidget()
 
         if current == self.lamp_page:
             self.show_menu()
-
         elif current == self.temp_page:
             self.show_menu()
-
         elif current == self.menu_ui:
             self.show_home()
-
         else:
             self.show_home()
     # =========================
@@ -156,7 +161,10 @@ if __name__ == "__main__":
     window = MainWindow()
     window.show()
 
-    QTimer.singleShot(100, window.ui.loading_overlay.show)
-    QTimer.singleShot(100, window.ui.loading_overlay.raise_)
+    QTimer.singleShot(0, lambda: (
+            window.ui.loading_overlay.setGeometry(window.rect()),
+            window.ui.loading_overlay.raise_(),
+            window.ui.loading_overlay.show()
+        ))
 
     sys.exit(app.exec())
