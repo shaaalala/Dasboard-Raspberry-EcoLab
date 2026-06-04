@@ -79,8 +79,8 @@ class MainWindow(QMainWindow):
         # =========================
         self.menu_ui.btn_lamp.clicked.connect(self.show_lamp)
         self.menu_ui.btn_ac.clicked.connect(self.show_temp)
-        self.menu_ui.btn_undo.clicked.connect(self.show_home)
-        self.menu_ui.btn_exit.clicked.connect(self.close)
+        self.ui.btn_undo.clicked.connect(self.go_back)
+        self.ui.btn_exit.clicked.connect(self.close)
 
         # =========================
         # LOADING EFFECT
@@ -115,6 +115,21 @@ class MainWindow(QMainWindow):
     def show_temp(self):
         self.ui.stackedWidget.setCurrentWidget(self.temp_page)
 
+    def go_back(self):
+
+        current = self.ui.stackedWidget.currentWidget()
+
+        if current == self.lamp_page:
+            self.show_menu()
+
+        elif current == self.temp_page:
+            self.show_menu()
+
+        elif current == self.menu_ui:
+            self.show_home()
+
+        else:
+            self.show_home()
     # =========================
     # DRAG WINDOW
     # =========================

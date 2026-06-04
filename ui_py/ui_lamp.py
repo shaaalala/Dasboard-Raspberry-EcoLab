@@ -47,6 +47,20 @@ class Ui_Form(object):
 
         self.verticalLayout.addItem(self.verticalSpacer)
 
+        self.label_title = QLabel(Form)
+        self.label_title.setObjectName(u"label_title")
+
+        self.label_title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.label_title.setStyleSheet("""
+        color: #00C2FF;
+        font-size: 40px;
+        font-weight: bold;
+        padding-bottom: 30px;                               
+        """)
+
+        self.verticalLayout.addWidget(self.label_title)
+
         self.lampLayout = QHBoxLayout()
         self.lampLayout.setSpacing(30)
         self.lampLayout.setObjectName(u"lampLayout")
@@ -131,6 +145,15 @@ class Ui_Form(object):
     # setupUi
 
     def retranslateUi(self, Form):
+        
+        self.label_title.setText(
+    QCoreApplication.translate(
+        "Form",
+        u"LIGHTING CONTROL",
+        None
+    )
+)
+
         self.lamp1.setText(QCoreApplication.translate("Form", u"Lamp 1\n"
 "OFF", None))
         self.lamp2.setText(QCoreApplication.translate("Form", u"Lamp 2\n"

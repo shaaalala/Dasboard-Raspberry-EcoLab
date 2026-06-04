@@ -46,24 +46,23 @@ QPushButton#icon_btn{
 
         self.layout = QVBoxLayout(self)
 
+        
+       # =========================
+        # TITLE MENU
         # =========================
-        # TOP BUTTONS (UNDO + EXIT)
-        # =========================
-        top = QHBoxLayout()
+        self.title_menu = QLabel("MENU")
+        self.title_menu.setAlignment(Qt.AlignCenter)
 
-        self.btn_undo = QPushButton("↶")
-        self.btn_undo.setMinimumSize(45, 45)
-        self.btn_undo.setObjectName("icon_btn")
+        self.title_menu.setFont(
+            QFont("Consolas", 32, QFont.Bold)
+        )
 
-        self.btn_exit = QPushButton("✕")
-        self.btn_exit.setMinimumSize(45, 45)
-        self.btn_exit.setObjectName("icon_btn")
+        self.title_menu.setStyleSheet("""
+        color: #00C2FF;
+        padding-bottom: 20px;
+        """)
 
-        top.addWidget(self.btn_undo)
-        top.addStretch()
-        top.addWidget(self.btn_exit)
-
-        self.layout.addLayout(top)
+        self.layout.addWidget(self.title_menu)
 
         # =========================
         # CARDS AREA
@@ -126,6 +125,12 @@ QPushButton#icon_btn{
         cards.addSpacing(30)
         cards.addWidget(self.card_ac)
         cards.addStretch()
+
+        self.layout.addStretch()
+        
+        self.layout.addWidget(self.title_menu)
+
+        self.layout.addSpacing(20)
 
         self.layout.addLayout(cards)
 

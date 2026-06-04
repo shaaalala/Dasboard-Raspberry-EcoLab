@@ -56,18 +56,18 @@ class Ui_temp(object):
 
         self.label_title = QLabel(temp)
         self.label_title.setObjectName(u"label_title")
-        self.label_title.setStyleSheet(u"\n"
-"color: black;\n"
-"font-size: 24px;\n"
-"font-weight: bold;\n"
-"      ")
+        self.label_title.setStyleSheet("""
+color: #00C2FF;
+font-size: 45px;
+font-weight: bold;
+""")
         self.label_title.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout.addWidget(self.label_title)
 
         self.frame = QFrame(temp)
         self.frame.setObjectName(u"frame")
-        self.frame.setFrameShape(QFrame.Shape.StyledPanel)
+        self.frame.setFrameShape(QFrame.Shape.NoFrame)
         self.frame.setFrameShadow(QFrame.Shadow.Raised)
         self.horizontalLayout = QHBoxLayout(self.frame)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
@@ -78,12 +78,12 @@ class Ui_temp(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.btn_ac.sizePolicy().hasHeightForWidth())
         self.btn_ac.setSizePolicy(sizePolicy)
-        self.btn_ac.setMinimumSize(QSize(120, 120))
-        self.btn_ac.setMaximumSize(QSize(120, 120))
+        self.btn_ac.setMinimumSize(QSize(100, 100))
+        self.btn_ac.setMaximumSize(QSize(100, 100))
         self.btn_ac.setStyleSheet(u"\n"
 "QPushButton {\n"
 "    background-color: #bdc3c7;\n"
-"    border-radius: 60px;\n"
+"    border-radius: 10px;\n"
 "}\n"
 "QPushButton:checked {\n"
 "    background-color: #27ae60;\n"
@@ -92,7 +92,7 @@ class Ui_temp(object):
         icon = QIcon()
         icon.addFile(u"assets/AC OFF.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.btn_ac.setIcon(icon)
-        self.btn_ac.setIconSize(QSize(60, 60))
+        self.btn_ac.setIconSize(QSize(100, 100))
         self.btn_ac.setCheckable(True)
 
         self.horizontalLayout.addWidget(self.btn_ac)
@@ -188,7 +188,7 @@ class Ui_temp(object):
     # setupUi
 
     def retranslateUi(self, temp):
-        self.label_title.setText(QCoreApplication.translate("temp", u"CONTROL SUHU", None))
+        self.label_title.setText(QCoreApplication.translate("temp", u"TEMPERATURE CONTROL", None))
         self.label_status.setText(QCoreApplication.translate("temp", u"Status AC: OFF", None))
         self.btn_temp_up.setText(QCoreApplication.translate("temp", u"Temp +", None))
         self.btn_cool.setText(QCoreApplication.translate("temp", u"COOL", None))
