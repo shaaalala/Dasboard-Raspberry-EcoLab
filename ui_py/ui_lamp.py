@@ -22,10 +22,12 @@ class Ui_Form(object):
             background: transparent;
         }
         QToolButton {
-            background-color: #7f8c8d;
+            background-color:  #95a5a6;
             color: white;
             border-radius: 20px;
             font-size: 14px;
+            font-weight: bold;
+            padding: 8px;
         }
         QToolButton:checked {
             background-color: #f39c12;
@@ -97,31 +99,31 @@ class Ui_Form(object):
         # =========================
         self.lamp1 = QToolButton(Form)
         self.lamp1.setIcon(icon)
-        self.lamp1.setIconSize(QSize(70, 70))
+        self.lamp1.setIconSize(QSize(50, 50))
         self.lamp1.setCheckable(True)
         self.lamp1.setText("Lamp 1\nOFF")
 
         self.lamp2 = QToolButton(Form)
         self.lamp2.setIcon(icon)
-        self.lamp2.setIconSize(QSize(70, 70))
+        self.lamp2.setIconSize(QSize(50, 50))
         self.lamp2.setCheckable(True)
         self.lamp2.setText("Lamp 2\nOFF")
 
         self.lamp3 = QToolButton(Form)
         self.lamp3.setIcon(icon)
-        self.lamp3.setIconSize(QSize(70, 70))
+        self.lamp3.setIconSize(QSize(50, 50))
         self.lamp3.setCheckable(True)
         self.lamp3.setText("Lamp 3\nOFF")
 
         self.lamp4 = QToolButton(Form)
         self.lamp4.setIcon(icon)
-        self.lamp4.setIconSize(QSize(70, 70))
+        self.lamp4.setIconSize(QSize(50, 50))
         self.lamp4.setCheckable(True)
         self.lamp4.setText("Lamp 4\nOFF")
 
         self.lamp5 = QToolButton(Form)
         self.lamp5.setIcon(icon)
-        self.lamp5.setIconSize(QSize(70, 70))
+        self.lamp5.setIconSize(QSize(50, 50))
         self.lamp5.setCheckable(True)
         self.lamp5.setText("Lamp 5\nOFF")
 
@@ -170,6 +172,11 @@ class Ui_Form(object):
         self.lamp3.setText("Lamp 3\nOFF")
         self.lamp4.setText("Lamp 4\nOFF")
         self.lamp5.setText("Lamp 5\nOFF")
+
+        for lamp in [self.lamp1, self.lamp2, self.lamp3, self.lamp4, self.lamp5]:
+                lamp.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
+                lamp.setIconSize(QSize(48, 48))
+                lamp.setFixedSize(130, 130)
 
         self.label_MCUA.setText(
             QCoreApplication.translate("Form", "MCU A: DISCONNECTED", None)
